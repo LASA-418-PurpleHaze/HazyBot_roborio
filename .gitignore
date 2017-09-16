@@ -1,0 +1,43 @@
+#ant specific
+dist/
+build/
+sysProps.xml
+
+#netbeans specific
+core
+nbproject/*
+!nbproject/project.xml
+!nbproject/project.properties
+nbbuild/
+nbdist/
+nbactions.xml
+nb-configuration.xml
+
+#sim crap
+simsrc/*
+simdist/*
+
+# Package Files
+#*.jar
+*.war
+*.ear
+
+#java specific
+*.class
+
+#python specific
+*.pyc
+
+#general swap/backup files
+*.so
+*.log
+*.out
+*~
+*.swp
+*.DS_Store
+*.lock
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+.DS_Store
