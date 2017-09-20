@@ -1,0 +1,36 @@
+{
+  "mode": {
+    "name": "mecanum",
+    "motors": {
+      "left_front": {
+        "port": 0,
+        "reversed": false,
+        "scale": 0.5
+      },
+      "left_back": {
+        "port": 1,
+        "reversed": false,
+        "scale": 0.5
+      }
+    },
+    "input": {
+      "drive": {
+        "type": "joystick",
+        "port": "0",
+        "axis": "y"
+      },
+      "strafe": {
+        "type": "joystick",
+        "port": "0",
+        "axis": "x"
+      },
+      "turn": {
+        "type": "button",
+        "port": "1",
+        "index": "0",
+        "on": 1,
+        "off": 0
+      }
+    }
+  }
+}
