@@ -19,13 +19,13 @@
       "type": "joystick",
       "index": 1,
       "port": 0,
-      "axis": "y"
+      "axis": 1 /* y = 1, x = 0 */
     },
     "strafe": {
       "type": "joystick",
       "index": 1,
       "port": 0,
-      "axis": "x"
+      "axis": 0
     },
     "turn": {
       "type": "button",
