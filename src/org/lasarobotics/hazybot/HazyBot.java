@@ -3,21 +3,26 @@ package org.lasarobotics.hazybot;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.VictorSP;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 import org.json.simple.parser.ParseException;
 
 public class HazyBot extends IterativeRobot {
-
     static String configFilepath = "idkwheretoputityet";
     List<HazyMotor> motorList;
     List<Joystick> joysticklist;
+    Mode mode;
 
     @Override
     public void robotInit() {
@@ -30,92 +35,103 @@ public class HazyBot extends IterativeRobot {
         } catch (ParseException ex) {
         }
 
-        JSONObject motors = (JSONObject) robotConfig.get("motors");
+        String modeName = (String) robotConfig.get("mode");
+        Hardware hardware = new Hardware(robotConfig);
+        JSONObject options = (JSONObject) robotConfig.get("options");
 
-        //placeholder for when we decide json structure
-        Mode jsonMode;
-        for (Object motorName : motors.keySet()) {
-            JSONObject motor = (JSONObject) motors.get(motorName);
-
-            if (jsonMode == Mode.SINGLE_BUTTON) {
-                motorList.add(HazyMotor.fromButton(joysticklist.get((Integer) motor.get("joystick")),
-                                    (Integer) motor.get("port"),
-                                    (Integer) motor.get("button")));
-                                        
-            } else if (jsonMode == Mode.SINGLE_AXIS) {
-                motorList.add(HazyMotor.fromAxis(joysticklist.get((Integer) motor.get("joystick")),
-                                    (Integer) motor.get("port"),
-                                    (Integer) motor.get("axis")));
-            }
+        switch (modeName) {
+            case "mecanum":
+               mode = new Mecanum(hardware, options);
+               break;
         }
     }
 
     @Override
     public void teleopPeriodic() {
-        for (HazyMotor m : motorList) {
-            m.update();
-        }
+
     }
 }
 
-enum Mode {
-    SINGLE_BUTTON,
-    SINGLE_AXIS,
-    MULTI,
-    MECANUM
+interface Mode {
+    void teleopPeriodic();
+}
+
+class Hardware {
+    private Map<String, List<HazyMotor>> motorMap = new HashMap<>();
+    private Map<String, JSONObject> inputMap = new HashMap<>();
+    // cache joystick so we don't get it every loop
+    private Map<Integer, Joystick> joystickMap = new HashMap<>();
+
+    public Hardware(JSONObject config) {
+        JSONObject motors = (JSONObject) config.get("motors");
+        motors.forEach((k, v) -> {
+            String groupName = (String) k;
+            JSONArray motorGroup = (JSONArray) v;
+            List<HazyMotor> motorList = new ArrayList<>();
+
+            motorGroup.forEach(motor -> {
+                JSONObject parameters = (JSONObject) v;
+                int port = (int) parameters.get("port");
+                boolean reversed = (boolean) parameters.get("reversed");
+                double scale = (double) parameters.get("scale");
+                motorList.add(new HazyMotor(port, reversed, scale));
+            });
+
+            motorMap.put(groupName, motorList);
+        });
+
+        JSONObject inputs = (JSONObject) config.get("inputs");
+        inputs.forEach((k, v) -> {
+            String inputName = (String) k;
+            JSONObject parameters = (JSONObject) v;
+            inputMap.put(inputName, parameters);
+        });
+    }
+
+    private Joystick getJoystick(int port) {
+        if (joystickMap.containsKey(port)) {
+            return joystickMap.get(port);
+        } else {
+            Joystick joystick = new Joystick(port);
+            joystickMap.put(port, joystick);
+            return joystick;
+        }
+    }
+
+    public double getInput(String name) {
+        JSONObject parameters = inputMap.get(name);
+        int port = (int) parameters.get("port");
+        int index = (int) parameters.get("index");
+        Joystick joystick = getJoystick(port);
+
+        switch ((String) parameters.get("type")) {
+            case "axis":
+                return joystick.getRawAxis(index);
+            case "button":
+                double on = (double) parameters.get("on");
+                double off = (double) parameters.get("off");
+                return joystick.getRawButton(index) ? on : off;
+            default:
+                // TODO: actually handle exceptions
+                return 0;
+        }
+    }
+
+    public void setOutput(String name, double value) {
+        motorMap.get(name).forEach(motor -> motor.setValue(value));
+    }
 }
 
 class HazyMotor {
-
-    Mode mode;
-
-    Joystick m_joystick1;
-    Joystick m_joystick2;
-    // list of buttons that can be used as input
-    ArrayList<Integer> buttons;
-    ArrayList<Integer> axes;
-
     VictorSP victor;
+    double scale;
 
-    // probably a good idea to make one general constructor which can be used in static initializers
-    /*
-    public HazyMotor(Joystick j, int button, int port) {
+    public HazyMotor(int port, boolean reversed, double scale) {
         victor = new VictorSP(port);
+        victor.setInverted(reversed);
+        this.scale = scale;
     }
-    */
-
-    //
-    public HazyMotor(Mode m, Joystick j1, Joystick j2, int port, ArrayList<Integer> buttons, ArrayList<Integer> axes) {
-        mode = m;
-        victor = new VictorSP(port);
-        m_joystick1 = j1;
-        if (m_joystick2 != null) {
-            m_joystick2 = j2;
-        }
-        this.buttons = buttons;
-        this.axes = axes;
-
-    }
-
-    // for use in single-input, do not use if you need multiple inputs
-    public static HazyMotor fromButton(Joystick j, int port, int button) {
-        return new HazyMotor(Mode.SINGLE_BUTTON, j, null, port, new ArrayList<Integer>(button), null);
-    }
-
-    // for use in single-input, do not use if you need multiple inputs
-    public static HazyMotor fromAxis(Joystick j, int port, int axis) {
-        return new HazyMotor(Mode.SINGLE_AXIS, j, null, port, null, new ArrayList<Integer>(axis));
-    }
-
-    public void update() {
-        if (this.mode == Mode.SINGLE_BUTTON) {
-            if (m_joystick1.getRawButton(buttons.get(0))) {
-                victor.set(1.0);
-            } else {
-                victor.set(0.0);
-            }
-        } else if (this.mode == Mode.SINGLE_AXIS) {
-            victor.setSpeed(m_joystick1.getRawAxis(axes.get(0)));
-        }
+    public void setValue(double value) {
+        victor.set(scale * value);
     }
 }
