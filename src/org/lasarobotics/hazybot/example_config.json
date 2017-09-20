@@ -1,32 +1,36 @@
 {
   "mode": "mechanum",
   "motors": {
-    "left_front": {
-      "port": 0,
-      "reversed": false,
-      "scale": 0.5
-    },
-    "left_back": {
+    "left_front": [{
+        "port": 0,
+        "reversed": false,
+        "scale": 0.5,
+        "enabled": true,
+    }],
+    "left_back": [{
       "port": 1,
       "reversed": false,
-      "scale": 0.5
-    }
+      "scale": 0.5,
+      "enabled": true,
+    }]
   },
   "input": {
     "drive": {
       "type": "joystick",
-      "port": "0",
-      "axis": "y"
+      "index": 1,
+      "port": 0,
+      "axis": 1 /* y = 1, x = 0 */
     },
     "strafe": {
       "type": "joystick",
-      "port": "0",
-      "axis": "x"
+      "index": 1,
+      "port": 0,
+      "axis": 0
     },
     "turn": {
       "type": "button",
-      "port": "1",
-      "index": "0",
+      "port": 1,
+      "index": 0,
       "on": 1,
       "off": 0
     }
