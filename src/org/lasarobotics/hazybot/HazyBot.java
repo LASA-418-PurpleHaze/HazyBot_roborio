@@ -20,8 +20,6 @@ import org.json.simple.parser.ParseException;
 
 public class HazyBot extends IterativeRobot {
     static String configFilepath = "idkwheretoputityet";
-    List<HazyMotor> motorList;
-    List<Joystick> joysticklist;
     Mode mode;
 
     @Override
@@ -30,9 +28,12 @@ public class HazyBot extends IterativeRobot {
 
         try {
             robotConfig = (JSONObject) JSONValue.parseWithException(new FileReader(new File(configFilepath)));
-        } catch (FileNotFoundException ex) {
-        } catch (IOException ex) {
-        } catch (ParseException ex) {
+        } catch (FileNotFoundException e) {
+            System.err.println(e.getMessage());
+        } catch (IOException e) {
+            System.err.println(e.getMessage());
+        } catch (ParseException e) {
+            System.err.println(e.getMessage());
         }
 
         String modeName = (String) robotConfig.get("mode");
@@ -43,17 +44,42 @@ public class HazyBot extends IterativeRobot {
             case "mecanum":
                mode = new Mecanum(hardware, options);
                break;
+            default:
+                ConfigException.invalidMode(modeName);
         }
     }
 
     @Override
     public void teleopPeriodic() {
-
+        mode.teleopPeriodic();
     }
 }
 
 interface Mode {
     void teleopPeriodic();
+}
+
+class ConfigException extends Exception {
+    String message;
+    public ConfigException(String message) {
+        this.message = message;
+    }
+    @Override
+    public String getMessage() {
+        return message;
+    }
+    public static ConfigException invalidMode(String modeName) {
+        return new ConfigException(String.format("invalid mode % ", modeName));
+    }
+    public static ConfigException invalidInputType(String type) {
+        return new ConfigException(String.format("invalid input type %s", type));
+    }
+    public static ConfigException motorUndefined(String motorName) {
+        return new ConfigException(String.format("motor group %s undefined", motorName));
+    }
+    public static ConfigException inputUndefined(String inputName) {
+        return new ConfigException(String.format("input %s undefined", inputName));
+    }
 }
 
 class Hardware {
@@ -98,13 +124,18 @@ class Hardware {
         }
     }
 
-    public double getInput(String name) {
+    public double getInput(String name) throws ConfigException {
         JSONObject parameters = inputMap.get(name);
+
+        if (parameters == null)
+            throw ConfigException.inputUndefined(name);
+
         int port = (int) parameters.get("port");
         int index = (int) parameters.get("index");
         Joystick joystick = getJoystick(port);
 
-        switch ((String) parameters.get("type")) {
+        String type = (String) parameters.get("type");
+        switch (type) {
             case "axis":
                 return joystick.getRawAxis(index);
             case "button":
@@ -112,13 +143,16 @@ class Hardware {
                 double off = (double) parameters.get("off");
                 return joystick.getRawButton(index) ? on : off;
             default:
-                // TODO: actually handle exceptions
-                return 0;
+                throw ConfigException.invalidInputType(type);
         }
     }
 
-    public void setOutput(String name, double value) {
-        motorMap.get(name).forEach(motor -> motor.setValue(value));
+    public void setOutput(String name, double value) throws ConfigException {
+        List<HazyMotor> motorGroup = motorMap.get(name);
+        if (motorGroup == null)
+            throw ConfigException.motorUndefined(name);
+
+        motorGroup.forEach(motor -> motor.setValue(value));
     }
 }
 
