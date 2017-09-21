@@ -13,6 +13,9 @@ nbdist/
 nbactions.xml
 nb-configuration.xml
 
+# intellij specific
+.idea
+
 #sim crap
 simsrc/*
 simdist/*
