@@ -30,7 +30,11 @@
     "strafe": {
       "type": "axis",
       "port": 0,
+<<<<<<< HEAD
       "index": 0
+=======
+      "axis": 1
+>>>>>>> f9f498de2bfeed16206850a73a9337b2a9208f49
     },
     "drive": {
       "type": "axis",
