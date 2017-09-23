@@ -1,7 +1,5 @@
 package org.lasarobotics.hazybot;
 
-import org.lasarobotics.hazybot.inputs.InputID;
-
 public class ConfigException extends Exception {
     String message;
 
@@ -20,28 +18,28 @@ public class ConfigException extends Exception {
      * @param modeName
      * @return
      */
-    public static ConfigException invalidMode(String modeName) {
-        return new ConfigException(String.format("invalid mode % ", modeName));
+    public static ConfigException undefinedMode(String modeName) {
+        return new ConfigException(String.format("invalid mode %s", modeName));
     }
 
     /**
      * input type (currently joystick axis or button) unrecognized
      *
-     * @param type
+     * @param inputType
      * @return
      */
-    public static ConfigException invalidInputType(String type) {
-        return new ConfigException(String.format("invalid input type %s", type));
+    public static ConfigException undefinedInputType(String inputType) {
+        return new ConfigException(String.format("invalid input type %s", inputType));
     }
 
     /**
      * input type (currently joystick axis or button) unrecognized
      *
-     * @param type
+     * @param outputType
      * @return
      */
-    public static ConfigException invalidOutputType(String type) {
-        return new ConfigException(String.format("invalid output type %s", type));
+    public static ConfigException invalidOutputType(String outputType) {
+        return new ConfigException(String.format("invalid output type %s", outputType));
     }
 
     /**
@@ -50,7 +48,7 @@ public class ConfigException extends Exception {
      * @param inputName
      * @return
      */
-    public static ConfigException inputUndefined(String inputName) {
+    public static ConfigException undefinedInput(String inputName) {
         return new ConfigException(String.format("input %s undefined", inputName));
     }
 
@@ -60,7 +58,7 @@ public class ConfigException extends Exception {
      * @param outputName
      * @return
      */
-    public static ConfigException outputUndefined(String outputName) {
+    public static ConfigException undefinedOutput(String outputName) {
         return new ConfigException(String.format("output %s undefined", outputName));
     }
 

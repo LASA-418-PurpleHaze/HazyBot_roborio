@@ -29,7 +29,7 @@ public abstract class Input<I> {
     public static final Input fromConfig(JSONObject config) throws ConfigException {
         String type = (String) config.get("type");
         if (!inputTypes.containsKey(type))
-            throw ConfigException.invalidInputType(type);
+            throw ConfigException.undefinedInputType(type);
         config.remove(type);
 
         try {

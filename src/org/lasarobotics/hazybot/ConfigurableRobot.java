@@ -5,8 +5,6 @@ import edu.wpi.first.wpilibj.IterativeRobot;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.*;
-import java.util.HashMap;
-import java.util.Map;
 
 import static java.nio.file.StandardWatchEventKinds.*;
 
@@ -15,6 +13,7 @@ import org.json.simple.JSONValue;
 import org.json.simple.parser.ParseException;
 import org.lasarobotics.hazybot.inputs.Input;
 import org.lasarobotics.hazybot.inputs.JoystickInput;
+import org.lasarobotics.hazybot.modes.Mecanum;
 import org.lasarobotics.hazybot.modes.Mode;
 import org.lasarobotics.hazybot.outputs.GroupOutput;
 import org.lasarobotics.hazybot.outputs.MotorOutput;
@@ -27,14 +26,14 @@ import org.lasarobotics.hazybot.outputs.SolenoidOutput;
  */
 public class ConfigurableRobot extends IterativeRobot {
     private final static Path configFilepath = Paths.get("config file location");
-    private static Map<String, Class<? extends Mode>> modes = new HashMap<>();
-
     WatchKey watchKey;
     Mode mode;
 
     /* probably a better place to but this, but idk what classes the roboRIO/cRIO loads,
     so I can't trust static blocks in the other classes to execute */
     static {
+        Mode.registerMode("Mecanum", Mecanum.class);
+
         Input.registerInputType("joystick_axis", JoystickInput.Axis.class);
         Input.registerInputType("joystick_button", JoystickInput.Button.class);
 
@@ -87,15 +86,6 @@ public class ConfigurableRobot extends IterativeRobot {
         }
     }
 
-    /**
-     * register Mode with name to be used in config
-     *
-     * @param name mode name
-     * @param mode mode class
-     */
-    public static void registerMode(String name, Class<? extends Mode> mode) {
-        modes.put(name, mode);
-    }
 
     private JSONObject readConfig() throws IOException, ParseException {
         return (JSONObject) JSONValue.parseWithException(
@@ -114,27 +104,17 @@ public class ConfigurableRobot extends IterativeRobot {
             return;
         }
 
-        String modeName = (String) config.get("mode");
+        // update Mode if necessary
+        JSONObject modeConfig = (JSONObject) config.get("mode");
+        String modeName = (String) modeConfig.get("name");
+        modeConfig.remove(modeName);
+        Mode.setMode(modeName);
+        Mode.getMode().config(modeConfig);
 
-        if (!modes.containsKey(modeName))
-            throw ConfigException.invalidMode(modeName);
-
-        Class<? extends Mode> modeClass = modes.get(modeName);
-
-        // initialize mode if first time or mode changed
-        if (mode == null || modeClass != mode.getClass()) {
-            try {
-                mode = modeClass.newInstance();
-            } catch (Exception e) {
-                // just log error and continue for same reason
-                System.err.println(e);
-                return;
-            }
-        }
-
-        Hardware.loadConfig(config);
-        JSONObject options = (JSONObject) config.get("options");
-        mode.updateOptions(options);
+        // update Hardware config
+        JSONObject inputConfigs = (JSONObject) config.get("inputs");
+        JSONObject outputConfigs = (JSONObject) config.get("outputs");
+        Hardware.config(inputConfigs, outputConfigs);
     }
 
     /**

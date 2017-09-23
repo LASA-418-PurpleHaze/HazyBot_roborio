@@ -18,12 +18,13 @@ public class Hardware {
     public static List<Integer> activePorts;
 
     /**
-     * update hardware wrapper to reflect config
+     * update Hardware wrapper to reflect config
      *
-     * @param config
+     * @param inputConfigs
+     * @param outputConfigs
+     * @throws ConfigException
      */
-    static void loadConfig(JSONObject config) throws ConfigException {
-        JSONObject inputConfigs = (JSONObject) config.get("inputs");
+    static void config(JSONObject inputConfigs, JSONObject outputConfigs) throws ConfigException {
         for (Object n : inputConfigs.keySet()) {
             String inputName = (String) n;
             JSONObject inputConfig = (JSONObject) inputConfigs.get(inputName);
@@ -44,7 +45,6 @@ public class Hardware {
             }
         }
 
-        JSONObject outputConfigs = (JSONObject) config.get("inputs");
         for (Object n : outputConfigs.keySet()) {
             String outputName = (String) n;
             JSONObject outputConfig = (JSONObject) outputConfigs.get(outputName);
@@ -68,13 +68,14 @@ public class Hardware {
 
     /**
      * get value of named Input
+     *
      * @param name Input name
      * @return Input value, type unchecked for now
      * @throws ConfigException
      */
     public static Object getInput(String name) throws ConfigException {
         if (!inputs.containsKey(name))
-            throw ConfigException.inputUndefined(name);
+            throw ConfigException.undefinedInput(name);
 
         Input input = inputs.get(name);
         return input.getInput();
@@ -89,7 +90,7 @@ public class Hardware {
      */
     public static void setOutput(String name, Object value) throws ConfigException {
         if (!outputs.containsKey(name))
-            throw ConfigException.outputUndefined(name);
+            throw ConfigException.undefinedOutput(name);
 
         Output output = outputs.get(name);
         output.setOutput(value);
