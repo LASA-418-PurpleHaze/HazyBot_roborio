@@ -34,6 +34,7 @@ code:
 public class ExampleMode extends Mode {
   int example_mode_option;
   public void config(JSONObject config) throws ConfigException {
+    // get mode option
     example_mode_option = (int) config.get("example_mode_option");
   }
   public void teleopPeriodic() throws ConfigException {
