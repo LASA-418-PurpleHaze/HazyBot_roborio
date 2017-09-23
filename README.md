@@ -1,5 +1,5 @@
 # HazyBot_roborio
-Provides ConfigurableRobot, a subclass of IterativeRobot that is configurable via JSON.
+Provides ConfigurableRobot, a subclass of IterativeRobot that is configurable via JSON, which is watched for changes and reloaded live.
 
 ### Hardware support
 * input from joystick (axis or button)
