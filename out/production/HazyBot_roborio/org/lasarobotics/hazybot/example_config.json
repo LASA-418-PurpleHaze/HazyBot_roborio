@@ -1,0 +1,46 @@
+{
+  "mode": "mecanum",
+  "motors": {
+    "left_front": [{
+        "port": 0,
+        "reversed": false,
+        "scale": 1,
+        "enabled": true
+    }],
+    "left_back": [{
+      "port": 1,
+      "reversed": false,
+      "scale": 1,
+      "enabled": true
+    }],
+    "right_front": [{
+      "port": 1,
+      "reversed": true,
+      "scale": 1,
+      "enabled": true
+    }],
+    "right_back": [{
+      "port": 1,
+      "reversed": true,
+      "scale": 1,
+      "enabled": true
+    }]
+  },
+  "input": {
+    "strafe": {
+      "type": "axis",
+      "port": 0,
+      "index": 0
+    },
+    "drive": {
+      "type": "axis",
+      "port": 0,
+      "index": 1
+    },
+    "turn": {
+      "type": "axis",
+      "port": 1,
+      "index": 0
+    }
+  }
+}

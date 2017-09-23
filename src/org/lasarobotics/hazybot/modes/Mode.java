@@ -1,6 +1,7 @@
-package org.lasarobotics.hazybot;
+package org.lasarobotics.hazybot.modes;
 
 import org.json.simple.JSONObject;
+import org.lasarobotics.hazybot.ConfigException;
 
 public abstract class Mode {
     /**

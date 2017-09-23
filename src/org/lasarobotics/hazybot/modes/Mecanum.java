@@ -1,10 +1,15 @@
 package org.lasarobotics.hazybot.modes;
 
 import org.lasarobotics.hazybot.ConfigException;
+import org.lasarobotics.hazybot.ConfigurableRobot;
 import org.lasarobotics.hazybot.Hardware;
-import org.lasarobotics.hazybot.Mode;
 
 public class Mecanum extends Mode {
+    // this is how we have to register modes for now, probably a better way
+    static {
+        ConfigurableRobot.registerMode("Mecanum", Mecanum.class);
+    }
+
     @Override
     public void teleopPeriodic() throws ConfigException {
         double drive_power = Hardware.getInput("drive");

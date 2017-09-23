@@ -13,7 +13,13 @@ import static java.nio.file.StandardWatchEventKinds.*;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 import org.json.simple.parser.ParseException;
-import org.lasarobotics.hazybot.modes.Mecanum;
+import org.lasarobotics.hazybot.inputs.Input;
+import org.lasarobotics.hazybot.inputs.JoystickInput;
+import org.lasarobotics.hazybot.modes.Mode;
+import org.lasarobotics.hazybot.outputs.GroupOutput;
+import org.lasarobotics.hazybot.outputs.MotorOutput;
+import org.lasarobotics.hazybot.outputs.Output;
+import org.lasarobotics.hazybot.outputs.SolenoidOutput;
 
 /**
  * IterativeRobot that can read from a config file (and watch for changes)
@@ -21,15 +27,23 @@ import org.lasarobotics.hazybot.modes.Mecanum;
  */
 public class ConfigurableRobot extends IterativeRobot {
     private final static Path configFilepath = Paths.get("config file location");
-    private final static Map<String, Class<? extends Mode>> modes = new HashMap<>();
-
-    static {
-        // register modes
-        modes.put("mecanum", Mecanum.class);
-    }
+    private static Map<String, Class<? extends Mode>> modes = new HashMap<>();
 
     WatchKey watchKey;
     Mode mode;
+
+    /* probably a better place to but this, but idk what classes the roboRIO/cRIO loads,
+    so I can't trust static blocks in the other classes to execute */
+    static {
+        Input.registerInputType("joystick_axis", JoystickInput.Axis.class);
+        Input.registerInputType("joystick_button", JoystickInput.Button.class);
+
+        Output.registerOutputType("group", GroupOutput.class);
+        Output.registerOutputType("motor", MotorOutput.class);
+        Output.registerOutputType("solenoid", SolenoidOutput.class);
+
+    }
+
 
     @Override
     public void robotInit() {
@@ -71,6 +85,16 @@ public class ConfigurableRobot extends IterativeRobot {
             // log and ignore ConfigException if not already handled by the mode
             System.err.println(e.getMessage());
         }
+    }
+
+    /**
+     * register Mode with name to be used in config
+     *
+     * @param name mode name
+     * @param mode mode class
+     */
+    public static void registerMode(String name, Class<? extends Mode> mode) {
+        modes.put(name, mode);
     }
 
     private JSONObject readConfig() throws IOException, ParseException {
