@@ -1,11 +1,9 @@
 package org.lasarobotics.hazybot.modes;
 
 import org.lasarobotics.hazybot.ConfigException;
-import org.lasarobotics.hazybot.ConfigurableRobot;
 import org.lasarobotics.hazybot.Hardware;
 
 public class Mecanum extends Mode {
-    @Override
     public void teleopPeriodic() throws ConfigException {
         double drive_power = (double) Hardware.getInput("drive");
         double strafe_power = (double) Hardware.getInput("strafe");

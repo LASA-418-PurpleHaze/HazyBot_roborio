@@ -5,9 +5,6 @@ import org.json.simple.JSONObject;
 import org.lasarobotics.hazybot.ConfigException;
 import org.lasarobotics.hazybot.Hardware;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class MotorOutput extends Output<Double> {
     private VictorSP victorSP;
     private int port;

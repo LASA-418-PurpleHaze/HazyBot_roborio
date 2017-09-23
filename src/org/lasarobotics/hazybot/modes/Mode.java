@@ -66,6 +66,6 @@ public abstract class Mode {
      *
      * @param config holds mode-specific configuration
      */
-    public void config(JSONObject config) {
+    public void config(JSONObject config) throws ConfigException {
     }
 }
