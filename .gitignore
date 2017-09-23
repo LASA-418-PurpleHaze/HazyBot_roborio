@@ -15,6 +15,7 @@ nb-configuration.xml
 
 # intellij specific
 .idea
+out/
 
 #sim crap
 simsrc/*
