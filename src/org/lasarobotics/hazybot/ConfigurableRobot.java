@@ -40,9 +40,7 @@ public class ConfigurableRobot extends IterativeRobot {
         Output.registerOutputType("group", GroupOutput.class);
         Output.registerOutputType("motor", MotorOutput.class);
         Output.registerOutputType("solenoid", SolenoidOutput.class);
-
     }
-
 
     @Override
     public void robotInit() {
@@ -85,7 +83,6 @@ public class ConfigurableRobot extends IterativeRobot {
             System.err.println(e.getMessage());
         }
     }
-
 
     private JSONObject readConfig() throws IOException, ParseException {
         return (JSONObject) JSONValue.parseWithException(

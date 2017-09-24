@@ -11,6 +11,6 @@ public class NullOutput extends Output {
     public void config(JSONObject config) throws ConfigException {
     }
 
-    public void setOutput(Object value) {
+    public void setOutput(double value) {
     }
 }

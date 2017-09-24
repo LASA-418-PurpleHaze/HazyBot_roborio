@@ -5,7 +5,7 @@ import org.json.simple.JSONObject;
 import org.lasarobotics.hazybot.ConfigException;
 import org.lasarobotics.hazybot.Hardware;
 
-public class MotorOutput extends Output<Double> {
+public class MotorOutput extends Output {
     private VictorSP victorSP;
     private int port;
     private boolean enabled;
@@ -33,7 +33,7 @@ public class MotorOutput extends Output<Double> {
         Hardware.activePorts.remove(port);
     }
 
-    public void setOutput(Double value) {
+    public void setOutput(double value) {
         if (enabled)
             victorSP.set(scale * value);
     }

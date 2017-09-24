@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 // takes Double so it's easily interoperable with the Inputs
-public class SolenoidOutput extends Output<Double> {
+public class SolenoidOutput extends Output {
     private static List<Integer> activePorts = new ArrayList<>();
     private Solenoid solenoid;
     private int port;
@@ -32,7 +32,7 @@ public class SolenoidOutput extends Output<Double> {
         activePorts.remove(port);
     }
 
-    public void setOutput(Double value) {
+    public void setOutput(double value) {
         /* enable if input is positive, more compatible with current Inputs
            than taking a boolean */
         boolean on = value > 0;

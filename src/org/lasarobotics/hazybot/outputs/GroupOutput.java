@@ -6,14 +6,14 @@ import org.lasarobotics.hazybot.ConfigException;
 
 import java.util.HashMap;
 
-public class GroupOutput<O> extends Output<O> {
+public class GroupOutput extends Output {
     /* map configs to outputs so duplicates are avoided and no unnecessary
        work is done when config is updated */
-    private HashMap<JSONObject, Output<O>> outputs = new HashMap<>();
+    private HashMap<JSONObject, Output> outputs = new HashMap<>();
 
     public void config(JSONObject config) throws ConfigException {
         JSONArray outputArray = (JSONArray) config.get("outputs");
-        HashMap<JSONObject, Output<O>> newOutputs = new HashMap<>();
+        HashMap<JSONObject, Output> newOutputs = new HashMap<>();
 
         for (Object o : outputArray) {
             JSONObject outputConfig = (JSONObject) o;
@@ -34,8 +34,8 @@ public class GroupOutput<O> extends Output<O> {
         outputs = newOutputs;
     }
 
-    public void setOutput(O value) {
-        for (Output<O> output : outputs.values()) {
+    public void setOutput(double value) {
+        for (Output output : outputs.values()) {
             output.setOutput(value);
         }
     }

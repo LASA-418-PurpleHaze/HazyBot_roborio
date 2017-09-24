@@ -5,8 +5,8 @@ import org.lasarobotics.hazybot.Hardware;
 
 public class Arcade extends Mode {
     public void teleopPeriodic() throws ConfigException {
-        double throttle_power = (double) Hardware.getInput("throttle");
-        double wheel_power = (double) Hardware.getInput("wheel");
+        double throttle_power = Hardware.getInput("throttle");
+        double wheel_power = Hardware.getInput("wheel");
 
         double left_power = throttle_power + wheel_power;
         double right_power = throttle_power - wheel_power;

@@ -5,9 +5,9 @@ import org.lasarobotics.hazybot.Hardware;
 
 public class Mecanum extends Mode {
     public void teleopPeriodic() throws ConfigException {
-        double drive_power = (double) Hardware.getInput("drive");
-        double strafe_power = (double) Hardware.getInput("strafe");
-        double turn_power = (double) Hardware.getInput("turn");
+        double drive_power = Hardware.getInput("drive");
+        double strafe_power = Hardware.getInput("strafe");
+        double turn_power = Hardware.getInput("turn");
 
         double left_front_power = drive_power + turn_power + strafe_power;
         double left_back_power = drive_power + turn_power - strafe_power;

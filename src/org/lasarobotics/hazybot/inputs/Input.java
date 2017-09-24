@@ -6,7 +6,7 @@ import org.lasarobotics.hazybot.ConfigException;
 import java.util.HashMap;
 import java.util.Map;
 
-public abstract class Input<I> {
+public abstract class Input {
     private static Map<String, Class<? extends Input>> inputTypes = new HashMap<>();
 
     /**
@@ -41,7 +41,13 @@ public abstract class Input<I> {
                     "Using ConstInput. The erroneous config entry was:");
             System.err.println(config);
             System.err.println(e.getMessage());
-            return new ConstInput();
+
+            // return ConstInput that always returns 0
+            Input constInput = new ConstInput();
+            JSONObject constInputConfig = new JSONObject();
+            constInputConfig.put("value", 0);
+            constInput.config(constInputConfig);
+            return constInput;
         }
     }
 
@@ -64,5 +70,5 @@ public abstract class Input<I> {
      *
      * @return
      */
-    public abstract I getInput();
+    public abstract double getInput();
 }

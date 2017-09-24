@@ -19,7 +19,7 @@ public class JoystickInput {
         }
     }
 
-    public static class Axis extends Input<Double> {
+    public static class Axis extends Input {
         private Joystick joystick;
         private int axis;
         private double deadband;
@@ -31,13 +31,13 @@ public class JoystickInput {
             deadband = (double) config.getOrDefault("deadband", 0);
         }
 
-        public Double getInput() {
+        public double getInput() {
             // return value if outside deadband
             double value = joystick.getRawAxis(axis);
             return value > deadband ? value : 0;
         }
     }
-    public static class Button extends Input<Double> {
+    public static class Button extends Input {
         private Joystick joystick;
         private int button;
         private double on, off;
@@ -56,7 +56,7 @@ public class JoystickInput {
             toggle = (boolean) config.getOrDefault("toggle", false);
         }
 
-        public Double getInput() {
+        public double getInput() {
             boolean pressed = joystick.getRawButton(button);
             if (toggle) {
                 if (pressed != wasPressed) {

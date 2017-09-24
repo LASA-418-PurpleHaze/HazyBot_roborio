@@ -6,7 +6,7 @@ import org.lasarobotics.hazybot.ConfigException;
 import java.util.HashMap;
 import java.util.Map;
 
-public abstract class Output<O> {
+public abstract class Output {
     private static Map<String, Class<? extends Output>> outputTypes = new HashMap<>();
 
     /**
@@ -41,6 +41,7 @@ public abstract class Output<O> {
                     "Using NullOutput. The erroneous config entry was:");
             System.err.println(config);
             System.err.println(e.getMessage());
+
             return new NullOutput();
         }
     }
@@ -63,5 +64,5 @@ public abstract class Output<O> {
      *
      * @param value
      */
-    public abstract void setOutput(O value);
+    public abstract void setOutput(double value);
 }

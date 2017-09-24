@@ -70,10 +70,10 @@ public class Hardware {
      * get value of named Input
      *
      * @param name Input name
-     * @return Input value, type unchecked for now
+     * @return Input value
      * @throws ConfigException
      */
-    public static Object getInput(String name) throws ConfigException {
+    public static double getInput(String name) throws ConfigException {
         if (!inputs.containsKey(name))
             throw ConfigException.undefinedInput(name);
 
@@ -85,10 +85,10 @@ public class Hardware {
      * set value of named Output
      *
      * @param name  Output name
-     * @param value Output value, type unchecked for now
+     * @param value Output value
      * @throws ConfigException
      */
-    public static void setOutput(String name, Object value) throws ConfigException {
+    public static void setOutput(String name, double value) throws ConfigException {
         if (!outputs.containsKey(name))
             throw ConfigException.undefinedOutput(name);
 
