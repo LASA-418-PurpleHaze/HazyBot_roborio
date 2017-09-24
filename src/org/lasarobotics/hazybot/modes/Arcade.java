@@ -3,7 +3,7 @@ package org.lasarobotics.hazybot.modes;
 import org.lasarobotics.hazybot.ConfigException;
 import org.lasarobotics.hazybot.Hardware;
 
-public class CheesyDrive extends Mode {
+public class Arcade extends Mode {
     public void teleopPeriodic() throws ConfigException {
         double throttle_power = (double) Hardware.getInput("throttle");
         double wheel_power = (double) Hardware.getInput("wheel");
