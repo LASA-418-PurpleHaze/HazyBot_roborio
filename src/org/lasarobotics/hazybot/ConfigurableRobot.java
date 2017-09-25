@@ -13,6 +13,8 @@ import org.json.simple.JSONValue;
 import org.json.simple.parser.ParseException;
 import org.lasarobotics.hazybot.inputs.Input;
 import org.lasarobotics.hazybot.inputs.JoystickInput;
+import org.lasarobotics.hazybot.modes.Arcade;
+import org.lasarobotics.hazybot.modes.CheesyDrive;
 import org.lasarobotics.hazybot.modes.Mecanum;
 import org.lasarobotics.hazybot.modes.Mode;
 import org.lasarobotics.hazybot.outputs.GroupOutput;
