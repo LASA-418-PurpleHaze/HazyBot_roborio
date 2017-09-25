@@ -1,3 +1,4 @@
+<img src="http://www.robosquad.org/files/9113/5405/6341/lasa_hires.png" width="300" title="We would like to haze with you." />
 # HazyBot_roborio
 Provides ConfigurableRobot, a subclass of IterativeRobot that is configurable via a JSON file that is watched for changes and reloaded live.
 
