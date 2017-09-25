@@ -1,15 +1,18 @@
 package org.lasarobotics.hazybot.modes;
 
+import org.json.simple.JSONObject;
 import org.lasarobotics.hazybot.ConfigException;
 import org.lasarobotics.hazybot.Hardware;
 
 public class CheesyDrive extends Mode {
 
     private double leftPwm, rightPwm, oldWheel, quickStopAccumulator;
-    int quick_turn;
+    int quick_turn = 0;
+    double config_sensitivity = 0.0;
 
     public void config(JSONObject config) throws ConfigException {
         quick_turn = (int) config.get("quick_turn");
+        config_sensitivity = (double) config.get("sensitivity");      
     }
 
     public void teleopPeriodic() throws ConfigException {
@@ -23,7 +26,7 @@ public class CheesyDrive extends Mode {
         Hardware.setOutput("right", rightPwm);
     }
 
-    private static void cheesyDrive(double throttle, double wheel) {
+    private void cheesyDrive(double throttle, double wheel) {
 
         double wheelNonLinearity;
 
@@ -48,8 +51,8 @@ public class CheesyDrive extends Mode {
         // Negative inertia!
         double negInertiaAccumulator = 0.0;
         double negInertiaScalar;
-        negInertiaScalar = 4.0;
-        sensitivity = ConstantsList.D_drive_sensitivity.getValue();
+        negInertiaScalar = 4.0;   
+        sensitivity = config_sensitivity;
 
         double negInertiaPower = negInertia * negInertiaScalar;
         negInertiaAccumulator += negInertiaPower;
@@ -65,7 +68,7 @@ public class CheesyDrive extends Mode {
         linearPower = throttle;
 
         // Quickturn!
-        if (quick_turn) {
+        if (quick_turn != 0) {
             if (Math.abs(linearPower) < 0.2) {
                 double alpha = 0.1;
                 quickStopAccumulator = (1 - alpha) * quickStopAccumulator
