@@ -6,19 +6,24 @@ import org.lasarobotics.hazybot.Hardware;
 public class CheesyDrive extends Mode {
 
     private double leftPwm, rightPwm, oldWheel, quickStopAccumulator;
+    int quick_turn;
+
+    public void config(JSONObject config) throws ConfigException {
+        quick_turn = (int) config.get("quick_turn");
+    }
 
     public void teleopPeriodic() throws ConfigException {
         double throttle_power = Hardware.getInput("throttle");
         double wheel_power = Hardware.getInput("wheel");
 
         // need to add parameter for quickturn
-        cheesyDrive(throttle_power, wheel_power, false);
+        cheesyDrive(throttle_power, wheel_power);
 
         Hardware.setOutput("left", leftPwm);
         Hardware.setOutput("right", rightPwm);
     }
 
-    private static void cheesyDrive(double throttle, double wheel, boolean isQuickTurn) {
+    private static void cheesyDrive(double throttle, double wheel) {
 
         double wheelNonLinearity;
 
@@ -60,7 +65,7 @@ public class CheesyDrive extends Mode {
         linearPower = throttle;
 
         // Quickturn!
-        if (isQuickTurn) {
+        if (quick_turn) {
             if (Math.abs(linearPower) < 0.2) {
                 double alpha = 0.1;
                 quickStopAccumulator = (1 - alpha) * quickStopAccumulator

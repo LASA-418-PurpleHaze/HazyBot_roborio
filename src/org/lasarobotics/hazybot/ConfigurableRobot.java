@@ -33,6 +33,8 @@ public class ConfigurableRobot extends IterativeRobot {
     so I can't trust static blocks in the other classes to execute */
     static {
         Mode.registerMode("Mecanum", Mecanum.class);
+        Mode.registerMode("Arcade", Arcade.class);
+        Mode.registerMode("CheesyDrive", CheesyDrive.class);
 
         Input.registerInputType("joystick_axis", JoystickInput.Axis.class);
         Input.registerInputType("joystick_button", JoystickInput.Button.class);
@@ -135,4 +137,3 @@ public class ConfigurableRobot extends IterativeRobot {
         return false;
     }
 }
-
