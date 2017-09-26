@@ -7,6 +7,9 @@ import java.io.IOException;
 import java.nio.file.*;
 
 import static java.nio.file.StandardWatchEventKinds.*;
+import java.util.ArrayList;
+import java.util.List;
+import org.json.simple.JSONArray;
 
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
@@ -29,7 +32,6 @@ import org.lasarobotics.hazybot.outputs.SolenoidOutput;
 public class ConfigurableRobot extends IterativeRobot {
     private final static Path configFilepath = Paths.get("config file location");
     WatchKey watchKey;
-    Mode mode;
 
     /* probably a better place to but this, but idk what classes the roboRIO/cRIO loads,
     so I can't trust static blocks in the other classes to execute */
@@ -81,7 +83,7 @@ public class ConfigurableRobot extends IterativeRobot {
         }
 
         try {
-            mode.teleopPeriodic();
+            Mode.teleopPeriodicAll();
         } catch (ConfigException e) {
             // log and ignore ConfigException if not already handled by the mode
             System.err.println(e.getMessage());
@@ -106,11 +108,9 @@ public class ConfigurableRobot extends IterativeRobot {
         }
 
         // update Mode if necessary
-        JSONObject modeConfig = (JSONObject) config.get("mode");
-        String modeName = (String) modeConfig.get("name");
-        modeConfig.remove(modeName);
-        Mode.setMode(modeName);
-        Mode.getMode().config(modeConfig);
+        JSONArray modeArray = (JSONArray) config.get("modes");
+        Mode.setAndConfigModes(modeArray);
+//        Mode.getMode().config(modeConfig);
 
         // update Hardware config
         JSONObject inputConfigs = (JSONObject) config.get("inputs");
