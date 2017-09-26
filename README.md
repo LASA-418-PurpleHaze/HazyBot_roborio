@@ -26,14 +26,10 @@ config.json:
       "port": 0
     }
   },
-  "modes": [{
+  "mode": {
     "name": "example_mode",
     "example_mode_option": 42
-  },
-  {
-    "name": "manipulator_mode",
-    "option1": "a"
-  }]
+  }
 }
 ```
 code:
