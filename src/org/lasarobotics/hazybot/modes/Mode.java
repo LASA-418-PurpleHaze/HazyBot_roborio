@@ -4,11 +4,13 @@ import org.json.simple.JSONObject;
 import org.lasarobotics.hazybot.ConfigException;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import org.json.simple.JSONArray;
 
 public abstract class Mode {
     private static Map<String, Class<? extends Mode>> modes = new HashMap<>();
-    private static Mode currentMode;
+    private static List<Mode> currentModes;
 
     /**
      * register Mode with name to be used in config
@@ -21,26 +23,37 @@ public abstract class Mode {
     }
 
     /**
-     * update current Mode if necessary
+     * Iterate through and setup modes
+     * Once iteration is done, mode config method is run.
      *
      * @param modeName
      * @throws ConfigException
      */
-    public static final void setMode(String modeName) throws ConfigException {
-        if (!modes.containsKey(modeName))
-            throw ConfigException.undefinedMode(modeName);
+    public static final void setAndConfigModes(JSONArray modeList) throws ConfigException {
+        for(int i = 0; i < modeList.size(); i++) {
+            JSONObject modeObject = (JSONObject) modeList.get(i);
+            String modeName = (String) modeObject.get("name");
+            if (!modes.containsKey(modeName))
+                throw ConfigException.undefinedMode(modeName);
 
-        Class<? extends Mode> modeClass = modes.get(modeName);
-
-        // initialize mode if first time or mode changed
-        if (currentMode == null || modeClass != currentMode.getClass()) {
+          // initialize mode if first time or mode changed
+          Class<? extends Mode> modeClass = modes.get(modeName);
+          // check if mode is already in currentModes
+          boolean skip = false;
+          for(int j = 0; j < currentModes.size(); j++) {
+              skip = modeClass == currentModes.get(i).getClass();
+          }
+          if (!skip) {
             try {
-                currentMode = modeClass.newInstance();
+                Mode currentMode = modeClass.newInstance();
+                currentModes.add(currentMode);
+                currentMode.config(modeObject);
             } catch (Exception e) {
                 /* just log error and continue with current mode so we don't
                    crash the whole program with a typo in the mode name */
                 System.err.println(e.getMessage());
             }
+        }
         }
     }
 
@@ -49,9 +62,9 @@ public abstract class Mode {
      *
      * @return
      */
-    public static Mode getMode() {
-        return currentMode;
-    }
+//    public static Mode getMode() {
+//        return currentMode;
+//    }
 
     /**
      * @throws ConfigException throws so that a ConfigException can be caught
@@ -59,7 +72,7 @@ public abstract class Mode {
      *                         particular way
      */
     public abstract void teleopPeriodic() throws ConfigException;
-
+    
     /**
      * called on init and whenever mode options change in the config
      * default implementation discards any options
@@ -67,5 +80,11 @@ public abstract class Mode {
      * @param config holds mode-specific configuration
      */
     public void config(JSONObject config) throws ConfigException {
+    }
+    
+    public static void teleopPeriodicAll() throws ConfigException {
+        for(int i = 0; i < currentModes.size(); i++) {
+            currentModes.get(i).teleopPeriodic();
+        }
     }
 }
