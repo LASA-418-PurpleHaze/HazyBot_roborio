@@ -66,6 +66,7 @@ public class Hardware {
             }
         }
 
+        // sets up binding for outputs, overrides modes
         for (Map.Entry<String, String> binding : map.entrySet()) {
             if (outputs.keySet().contains(binding.getKey()) && inputs.keySet().contains(binding.getValue())) {
                 Output output = outputs.get(boundOutput);
