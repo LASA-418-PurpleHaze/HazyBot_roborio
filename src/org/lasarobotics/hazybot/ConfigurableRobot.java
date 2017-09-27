@@ -115,7 +115,9 @@ public class ConfigurableRobot extends IterativeRobot {
         // update Hardware config
         JSONObject inputConfigs = (JSONObject) config.get("inputs");
         JSONObject outputConfigs = (JSONObject) config.get("outputs");
-        Hardware.config(inputConfigs, outputConfigs);
+        JSONObject bindingConfig = (JSONObject) config.get("binding");
+        Hardware.config(inputConfigs, outputConfigs, bindingConfig);
+
     }
 
     /**
