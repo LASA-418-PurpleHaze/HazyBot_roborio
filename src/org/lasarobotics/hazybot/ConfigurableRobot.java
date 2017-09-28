@@ -82,6 +82,7 @@ public class ConfigurableRobot extends IterativeRobot {
 
         try {
             mode.teleopPeriodic();
+            Binder.teleopPeriodic();
         } catch (ConfigException e) {
             // log and ignore ConfigException if not already handled by the mode
             System.err.println(e.getMessage());

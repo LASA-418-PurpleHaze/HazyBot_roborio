@@ -11,7 +11,7 @@ import java.util.Map;
 public class Hardware {
     private static Map<String, Input> inputs = new HashMap<>();
     private static Map<String, Output> outputs = new HashMap<>();
-    private static Map<Input, Output> bindings = new HashMap<>();
+    private static Map<String, String> bindings = new HashMap<>();
 
     /**
      * list of active output ports to avoid duplication
@@ -25,7 +25,7 @@ public class Hardware {
      * @param outputConfigs
      * @throws ConfigException
      */
-    static void config(JSONObject inputConfigs, JSONObject outputConfigs, JSONObject bindings) throws ConfigException {
+    static void config(JSONObject inputConfigs, JSONObject outputConfigs, JSONObject bindingConfig) throws ConfigException {
         for (Object n : inputConfigs.keySet()) {
             String inputName = (String) n;
             JSONObject inputConfig = (JSONObject) inputConfigs.get(inputName);
@@ -66,15 +66,13 @@ public class Hardware {
             }
         }
 
-        // sets up binding for outputs, overrides modes
-        for (Map.Entry<String, String> binding : map.entrySet()) {
-            if (outputs.keySet().contains(binding.getKey()) && inputs.keySet().contains(binding.getValue())) {
-                Output output = outputs.get(boundOutput);
-                Input input = inputs.get();
-
-                output.setOutput(input.getInput());
-            }
+        // updates bindings
+        for (Object o : bindingConfig.keySet()) {
+            String outputName = (String) o;
+            bindings.put(outputName, bindingConfig.getString(outputName));
         }
+
+        Binder.setMap(bindings);
     }
 
     /**
