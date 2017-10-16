@@ -27,7 +27,7 @@ import org.lasarobotics.hazybot.outputs.SolenoidOutput;
  * and automatically configure motors, inputs, and mode options
  */
 public class ConfigurableRobot extends IterativeRobot {
-    private final static Path configFilepath = Paths.get("config file location");
+    private final static Path configFilepath = Paths.get("/home/lvuser/config.json");
     WatchKey watchKey;
     Mode mode;
 

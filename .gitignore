@@ -12,6 +12,7 @@ nbbuild/
 nbdist/
 nbactions.xml
 nb-configuration.xml
+canfig.json
 
 # intellij specific
 .idea

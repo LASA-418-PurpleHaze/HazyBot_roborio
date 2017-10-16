@@ -21,9 +21,27 @@ config.json:
     }
   },
   "outputs": {
-    "example_motor": {
-      "type": "motor",
-      "port": 0
+    "left": {
+      "type": "group",
+      "outputs": [{
+        "type": "motor",
+        "port": 0
+      },
+      {
+        "type": "motor",
+        "port": 1
+      }]
+    },
+    "right": {
+      "type": "group",
+      "outputs": [{
+        "type": "motor",
+        "port": 2
+      },
+      {
+        "type": "motor",
+        "port": 3
+      }]
     }
   },
   "mode": {

@@ -69,7 +69,7 @@ public class Hardware {
         // updates bindings
         for (Object o : bindingConfig.keySet()) {
             String outputName = (String) o;
-            bindings.put(outputName, bindingConfig.getString(outputName));
+            bindings.put(outputName, (String) bindingConfig.get(outputName));
         }
 
         Binder.setMap(bindings);
