@@ -26,7 +26,7 @@ import org.lasarobotics.hazybot.outputs.SolenoidOutput;
  * IterativeRobot that can read from a config file (and watch for changes)
  * and automatically configure motors, inputs, and mode options
  */
-public class ConfigurableRobot extends IterativeRobot {
+public class Robot extends IterativeRobot {
     private final static Path configFilepath = Paths.get("/home/lvuser/config.json");
     WatchKey watchKey;
     Mode mode;
@@ -79,13 +79,15 @@ public class ConfigurableRobot extends IterativeRobot {
                 System.err.println(e.getMessage());
             }
         }
-
         try {
             mode.teleopPeriodic();
             Binder.teleopPeriodic();
         } catch (ConfigException e) {
             // log and ignore ConfigException if not already handled by the mode
             System.err.println(e.getMessage());
+        }
+        catch (NullPointerException e) {
+            System.err.println("fuck");
         }
     }
 
@@ -127,7 +129,8 @@ public class ConfigurableRobot extends IterativeRobot {
      * @return true if config changed, false if not
      */
     private boolean didConfigChange() {
-        for (WatchEvent<?> ev : watchKey.pollEvents()) {
+        try {
+            for (WatchEvent<?> ev : watchKey.pollEvents()) {
             WatchEvent.Kind<?> kind = ev.kind();
 
             // check if config modified or recreated
@@ -138,6 +141,10 @@ public class ConfigurableRobot extends IterativeRobot {
                 // can't watch individual files, so check if actually the config
                 return filepath.equals(configFilepath);
             }
+        }
+        }
+        catch(NullPointerException e) {
+            System.err.println("shit");
         }
         return false;
     }
