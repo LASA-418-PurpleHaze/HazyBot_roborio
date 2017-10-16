@@ -47,8 +47,7 @@ config.json:
   "mode": {
     "name": "example_mode",
     "example_mode_option": 42
-  }
-  
+  },
   "binding": {
     "output" : "input"
   }
