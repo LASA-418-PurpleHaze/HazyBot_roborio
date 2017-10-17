@@ -11,6 +11,8 @@ import org.json.simple.JSONValue;
 import org.json.simple.parser.ParseException;
 import org.lasarobotics.hazybot.inputs.Input;
 import org.lasarobotics.hazybot.inputs.JoystickInput;
+import org.lasarobotics.hazybot.modes.Arcade;
+import org.lasarobotics.hazybot.modes.CheesyDrive;
 import org.lasarobotics.hazybot.modes.Mecanum;
 import org.lasarobotics.hazybot.modes.Mode;
 import org.lasarobotics.hazybot.outputs.GroupOutput;
@@ -23,8 +25,8 @@ import org.lasarobotics.lib.HazyIterative;
  * IterativeRobot that can read from a config file (and watch for changes)
  * and automatically configure motors, inputs, and mode options
  */
-public class ConfigurableRobot extends HazyIterative {
-    private final static Path configFilepath = Paths.get("config file location");
+public class Robot extends HazyIterative {
+    private final static Path configFilepath = Paths.get("/home/lvuser/config.json");
     WatchKey watchKey;
     Mode mode;
 
@@ -32,6 +34,8 @@ public class ConfigurableRobot extends HazyIterative {
     so I can't trust static blocks in the other classes to execute */
     static {
         Mode.registerMode("Mecanum", Mecanum.class);
+        Mode.registerMode("Arcade", Arcade.class);
+        Mode.registerMode("CheesyDrive", CheesyDrive.class);
 
         Input.registerInputType("joystick_axis", JoystickInput.Axis.class);
         Input.registerInputType("joystick_button", JoystickInput.Button.class);
@@ -74,12 +78,15 @@ public class ConfigurableRobot extends HazyIterative {
                 System.err.println(e.getMessage());
             }
         }
-
         try {
             mode.teleopPeriodic();
+            Binder.teleopPeriodic();
         } catch (ConfigException e) {
             // log and ignore ConfigException if not already handled by the mode
             System.err.println(e.getMessage());
+        }
+        catch (NullPointerException e) {
+            e.printStackTrace();
         }
     }
 
@@ -110,7 +117,9 @@ public class ConfigurableRobot extends HazyIterative {
         // update Hardware config
         JSONObject inputConfigs = (JSONObject) config.get("inputs");
         JSONObject outputConfigs = (JSONObject) config.get("outputs");
-        Hardware.config(inputConfigs, outputConfigs);
+        JSONObject bindingConfig = (JSONObject) config.get("binding");
+        Hardware.config(inputConfigs, outputConfigs, bindingConfig);
+
     }
 
     /**
@@ -119,7 +128,8 @@ public class ConfigurableRobot extends HazyIterative {
      * @return true if config changed, false if not
      */
     private boolean didConfigChange() {
-        for (WatchEvent<?> ev : watchKey.pollEvents()) {
+        try {
+            for (WatchEvent<?> ev : watchKey.pollEvents()) {
             WatchEvent.Kind<?> kind = ev.kind();
 
             // check if config modified or recreated
@@ -131,7 +141,10 @@ public class ConfigurableRobot extends HazyIterative {
                 return filepath.equals(configFilepath);
             }
         }
+        }
+        catch(NullPointerException e) {
+            e.printStackTrace();
+        }
         return false;
     }
 }
-

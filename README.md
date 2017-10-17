@@ -1,4 +1,7 @@
+<img src="http://www.robosquad.org/files/9113/5405/6341/lasa_hires.png" width="300" title="We would like to haze with you." />
+
 # HazyBot_roborio
+
 Provides ConfigurableRobot, a subclass of IterativeRobot that is configurable via a JSON file that is watched for changes and reloaded live.
 
 ### Hardware support
@@ -18,14 +21,35 @@ config.json:
     }
   },
   "outputs": {
-    "example_motor": {
-      "type": "motor",
-      "port": 0
+    "left": {
+      "type": "group",
+      "outputs": [{
+        "type": "motor",
+        "port": 0
+      },
+      {
+        "type": "motor",
+        "port": 1
+      }]
+    },
+    "right": {
+      "type": "group",
+      "outputs": [{
+        "type": "motor",
+        "port": 2
+      },
+      {
+        "type": "motor",
+        "port": 3
+      }]
     }
   },
   "mode": {
     "name": "example_mode",
     "example_mode_option": 42
+  },
+  "binding": {
+    "output" : "input"
   }
 }
 ```

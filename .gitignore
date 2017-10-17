@@ -12,6 +12,7 @@ nbbuild/
 nbdist/
 nbactions.xml
 nb-configuration.xml
+config.json
 
 # intellij specific
 .idea
@@ -45,3 +46,5 @@ ehthumbs.db
 Desktop.ini
 $RECYCLE.BIN/
 .DS_Store
+hazybuild/netconsole-host.properties
+lib/native/lib/WPI_Native_Libraries.properties
