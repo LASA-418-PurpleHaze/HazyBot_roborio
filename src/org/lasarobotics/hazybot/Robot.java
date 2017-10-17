@@ -28,7 +28,6 @@ import org.lasarobotics.lib.HazyIterative;
 public class Robot extends HazyIterative {
     private final static Path configFilepath = Paths.get("/home/lvuser/config.json");
     WatchKey watchKey;
-    Mode mode;
 
     /* probably a better place to but this, but idk what classes the roboRIO/cRIO loads,
     so I can't trust static blocks in the other classes to execute */
@@ -79,7 +78,7 @@ public class Robot extends HazyIterative {
             }
         }
         try {
-            mode.teleopPeriodic();
+            Mode.getMode().teleopPeriodic();
             Binder.teleopPeriodic();
         } catch (ConfigException e) {
             // log and ignore ConfigException if not already handled by the mode
