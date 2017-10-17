@@ -1,7 +1,5 @@
 package org.lasarobotics.hazybot;
 
-import edu.wpi.first.wpilibj.IterativeRobot;
-
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.*;
@@ -19,12 +17,13 @@ import org.lasarobotics.hazybot.outputs.GroupOutput;
 import org.lasarobotics.hazybot.outputs.MotorOutput;
 import org.lasarobotics.hazybot.outputs.Output;
 import org.lasarobotics.hazybot.outputs.SolenoidOutput;
+import org.lasarobotics.lib.HazyIterative;
 
 /**
  * IterativeRobot that can read from a config file (and watch for changes)
  * and automatically configure motors, inputs, and mode options
  */
-public class ConfigurableRobot extends IterativeRobot {
+public class ConfigurableRobot extends HazyIterative {
     private final static Path configFilepath = Paths.get("config file location");
     WatchKey watchKey;
     Mode mode;
