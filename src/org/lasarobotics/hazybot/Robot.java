@@ -87,7 +87,7 @@ public class Robot extends IterativeRobot {
             System.err.println(e.getMessage());
         }
         catch (NullPointerException e) {
-            System.err.println("fuck");
+            e.printStackTrace();
         }
     }
 
@@ -144,7 +144,7 @@ public class Robot extends IterativeRobot {
         }
         }
         catch(NullPointerException e) {
-            System.err.println("shit");
+            e.printStackTrace();
         }
         return false;
     }

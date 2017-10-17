@@ -46,3 +46,5 @@ ehthumbs.db
 Desktop.ini
 $RECYCLE.BIN/
 .DS_Store
+hazybuild/netconsole-host.properties
+lib/native/lib/WPI_Native_Libraries.properties
