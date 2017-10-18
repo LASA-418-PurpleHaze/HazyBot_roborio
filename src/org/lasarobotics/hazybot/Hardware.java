@@ -1,5 +1,6 @@
 package org.lasarobotics.hazybot;
 
+import java.util.ArrayList;
 import org.json.simple.JSONObject;
 import org.lasarobotics.hazybot.inputs.Input;
 import org.lasarobotics.hazybot.outputs.Output;
@@ -16,7 +17,7 @@ public class Hardware {
     /**
      * list of active output ports to avoid duplication
      */
-    public static List<Integer> activePorts;
+    public static List<Integer> activePorts = new ArrayList<>();
 
     /**
      * update Hardware wrapper to reflect config

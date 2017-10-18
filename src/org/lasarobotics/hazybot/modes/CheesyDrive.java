@@ -22,7 +22,7 @@ public class CheesyDrive extends Mode {
 
         // need to add parameter for quickturn
         cheesyDrive(throttle_power, wheel_power);
-
+        
         Hardware.setOutput("left", leftPwm);
         Hardware.setOutput("right", rightPwm);
     }

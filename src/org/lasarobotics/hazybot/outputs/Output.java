@@ -41,7 +41,7 @@ public abstract class Output {
             System.err.println("WARNING: Output couldn't be created. " +
                     "Using NullOutput. The erroneous config entry was:");
             System.err.println(config);
-            System.err.println(e.getMessage());
+            e.printStackTrace();
 
             return new NullOutput();
         }

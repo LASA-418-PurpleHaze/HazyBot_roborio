@@ -41,7 +41,7 @@ public abstract class Input {
             System.err.println("WARNING: Input couldn't be created. " +
                     "Using ConstInput. The erroneous config entry was:");
             System.err.println(config);
-            System.err.println(e.getMessage());
+            System.err.println(e);
 
             // return ConstInput that always returns 0
             Input constInput = new ConstInput();

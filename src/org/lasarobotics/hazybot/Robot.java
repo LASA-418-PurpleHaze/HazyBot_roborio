@@ -127,7 +127,7 @@ public class Robot extends HazyIterative {
      * @return true if config changed, false if not
      */
     private boolean didConfigChange() {
-        try {
+        /*try {
             for (WatchEvent<?> ev : watchKey.pollEvents()) {
             WatchEvent.Kind<?> kind = ev.kind();
 
@@ -143,7 +143,7 @@ public class Robot extends HazyIterative {
         }
         catch(NullPointerException e) {
             e.printStackTrace();
-        }
+        }*/
         return false;
     }
 }
