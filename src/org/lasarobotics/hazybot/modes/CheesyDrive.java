@@ -3,6 +3,7 @@ package org.lasarobotics.hazybot.modes;
 import org.json.simple.JSONObject;
 import org.lasarobotics.hazybot.ConfigException;
 import org.lasarobotics.hazybot.Hardware;
+import org.lasarobotics.hazybot.JSONObjectWrapper;
 
 public class CheesyDrive extends Mode {
 
@@ -10,9 +11,9 @@ public class CheesyDrive extends Mode {
     int quick_turn = 0;
     double config_sensitivity = 0.0;
 
-    public void config(JSONObject config) throws ConfigException {
-        quick_turn = (Integer) config.get("quick_turn");
-        config_sensitivity = (Double) config.get("sensitivity");
+    public void config(JSONObjectWrapper config) throws ConfigException {
+        quick_turn = config.getInt("quick_turn");
+        config_sensitivity = config.getDouble("sensitivity");
     }
 
     public void teleopPeriodic() throws ConfigException {

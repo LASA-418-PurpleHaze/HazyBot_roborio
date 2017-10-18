@@ -2,6 +2,7 @@ package org.lasarobotics.hazybot.inputs;
 
 import org.json.simple.JSONObject;
 import org.lasarobotics.hazybot.ConfigException;
+import org.lasarobotics.hazybot.JSONObjectWrapper;
 
 /**
  * Output that throws away value, used to avoid crashing program
@@ -10,8 +11,8 @@ import org.lasarobotics.hazybot.ConfigException;
 public class ConstInput extends Input {
     private double value;
 
-    public void config(JSONObject config) throws ConfigException {
-        value = (Double) config.get("value");
+    public void config(JSONObjectWrapper config) throws ConfigException {
+        value = config.getDouble("value");
     }
 
     public double getInput() {

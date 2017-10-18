@@ -3,6 +3,7 @@ package org.lasarobotics.hazybot.inputs;
 import edu.wpi.first.wpilibj.Joystick;
 import org.json.simple.JSONObject;
 import org.lasarobotics.hazybot.ConfigException;
+import org.lasarobotics.hazybot.JSONObjectWrapper;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -25,10 +26,10 @@ public class JoystickInput {
         private double deadband;
 
         @Override
-        public void config(JSONObject config) throws ConfigException {
-            int port = (Integer) config.get("port");
+        public void config(JSONObjectWrapper config) throws ConfigException {
+            int port = config.getInt("port");
             joystick = getJoystick(port);
-            deadband = (Double) config.getOrDefault("deadband", 0);
+            deadband = config.getDoubleOrDefault("deadband", 0);
         }
 
         public double getInput() {
@@ -48,12 +49,12 @@ public class JoystickInput {
         private boolean toggled = false;
 
         @Override
-        public void config(JSONObject config) throws ConfigException {
-            int port = (Integer) config.get("port");
-            button = (Integer) config.get("button");
-            on = (Double) config.getOrDefault("on", 1);
-            off = (Double) config.getOrDefault("off", 0);
-            toggle = (Boolean) config.getOrDefault("toggle", false);
+        public void config(JSONObjectWrapper config) throws ConfigException {
+            int port = config.getInt("port");
+            button = config.getInt("button");
+            on = config.getDoubleOrDefault("on", 1);
+            off = config.getDoubleOrDefault("off", 0);
+            toggle = config.getBooleanOrDefault("toggle", false);
         }
 
         public double getInput() {

@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.VictorSP;
 import org.json.simple.JSONObject;
 import org.lasarobotics.hazybot.ConfigException;
 import org.lasarobotics.hazybot.Hardware;
+import org.lasarobotics.hazybot.JSONObjectWrapper;
 
 public class MotorOutput extends Output {
     private VictorSP victorSP;
@@ -11,8 +12,8 @@ public class MotorOutput extends Output {
     private boolean enabled;
     private double scale;
 
-    public void config(JSONObject config) throws ConfigException {
-        int port = (Integer) config.get("port");
+    public void config(JSONObjectWrapper config) throws ConfigException {
+        int port = config.getInt("port");
 
         // ensure motor not already in use
         if (Hardware.activePorts.contains(port)) {
@@ -22,9 +23,9 @@ public class MotorOutput extends Output {
 
         this.port = port;
         victorSP = new VictorSP(port);
-        enabled = (Boolean) config.getOrDefault("enabled", true);
-        scale = (Double) config.getOrDefault("scale", 1);
-        victorSP.setInverted((Boolean) config.getOrDefault("reversed", false));
+        enabled = config.getBooleanOrDefault("enabled", true);
+        scale = config.getDoubleOrDefault("scale", 1);
+        victorSP.setInverted(config.getBooleanOrDefault("reversed", false));
     }
 
     @Override

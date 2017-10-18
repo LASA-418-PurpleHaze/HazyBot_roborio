@@ -33,7 +33,7 @@ public class Hardware {
             // update Input config if it already exists
             if (inputs.containsKey(inputName)) {
                 Input input = inputs.get(inputName);
-                input.config(inputConfig);
+                input.config(new JSONObjectWrapper(inputConfig));
             } else {
                 inputs.put(inputName, Input.fromConfig(inputConfig));
             }
@@ -53,7 +53,7 @@ public class Hardware {
             // update Output config if it already exists
             if (outputs.containsKey(outputName)) {
                 Output output = outputs.get(outputName);
-                output.config(outputConfig);
+                output.config(new JSONObjectWrapper(outputConfig));
             } else {
                 outputs.put(outputName, Output.fromConfig(outputConfig));
             }

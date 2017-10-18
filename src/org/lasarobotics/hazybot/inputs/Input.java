@@ -2,6 +2,7 @@ package org.lasarobotics.hazybot.inputs;
 
 import org.json.simple.JSONObject;
 import org.lasarobotics.hazybot.ConfigException;
+import org.lasarobotics.hazybot.JSONObjectWrapper;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -34,7 +35,7 @@ public abstract class Input {
 
         try {
             Input input = inputTypes.get(type).newInstance();
-            input.config(config);
+            input.config(new JSONObjectWrapper(config));
             return input;
         } catch (Exception e) {
             System.err.println("WARNING: Input couldn't be created. " +
@@ -46,7 +47,7 @@ public abstract class Input {
             Input constInput = new ConstInput();
             JSONObject constInputConfig = new JSONObject();
             constInputConfig.put("value", 0);
-            constInput.config(constInputConfig);
+            constInput.config(new JSONObjectWrapper(constInputConfig));
             return constInput;
         }
     }
@@ -56,7 +57,7 @@ public abstract class Input {
      *
      * @param config
      */
-    public void config(JSONObject config) throws ConfigException {
+    public void config(JSONObjectWrapper config) throws ConfigException {
     }
 
     /**

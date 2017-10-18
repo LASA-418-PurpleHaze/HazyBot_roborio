@@ -2,6 +2,7 @@ package org.lasarobotics.hazybot.outputs;
 
 import org.json.simple.JSONObject;
 import org.lasarobotics.hazybot.ConfigException;
+import org.lasarobotics.hazybot.JSONObjectWrapper;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -34,7 +35,7 @@ public abstract class Output {
 
         try {
             Output output = outputTypes.get(type).newInstance();
-            output.config(config);
+            output.config(new JSONObjectWrapper(config));
             return output;
         } catch (Exception e) {
             System.err.println("WARNING: Output couldn't be created. " +
@@ -51,7 +52,7 @@ public abstract class Output {
      *
      * @param config
      */
-    public abstract void config(JSONObject config) throws ConfigException;
+    public abstract void config(JSONObjectWrapper config) throws ConfigException;
 
     /**
      * free an Output's resources

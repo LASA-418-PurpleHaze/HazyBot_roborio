@@ -3,6 +3,7 @@ package org.lasarobotics.hazybot.outputs;
 import edu.wpi.first.wpilibj.Solenoid;
 import org.json.simple.JSONObject;
 import org.lasarobotics.hazybot.ConfigException;
+import org.lasarobotics.hazybot.JSONObjectWrapper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,8 +14,8 @@ public class SolenoidOutput extends Output {
     private Solenoid solenoid;
     private int port;
 
-    public void config(JSONObject config) throws ConfigException {
-        int port = (Integer) config.get("port");
+    public void config(JSONObjectWrapper config) throws ConfigException {
+        int port = config.getInt("port");
 
         // ensure solenoid not already in use
         if (activePorts.contains(port)) {

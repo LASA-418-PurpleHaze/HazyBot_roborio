@@ -3,6 +3,7 @@ package org.lasarobotics.hazybot.outputs;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.lasarobotics.hazybot.ConfigException;
+import org.lasarobotics.hazybot.JSONObjectWrapper;
 
 import java.util.HashMap;
 
@@ -11,7 +12,7 @@ public class GroupOutput extends Output {
        work is done when config is updated */
     private HashMap<JSONObject, Output> outputs = new HashMap<>();
 
-    public void config(JSONObject config) throws ConfigException {
+    public void config(JSONObjectWrapper config) throws ConfigException {
         JSONArray outputArray = (JSONArray) config.get("outputs");
         HashMap<JSONObject, Output> newOutputs = new HashMap<>();
 
