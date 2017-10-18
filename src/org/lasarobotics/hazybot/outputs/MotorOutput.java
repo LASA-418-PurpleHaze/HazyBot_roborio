@@ -12,7 +12,7 @@ public class MotorOutput extends Output {
     private double scale;
 
     public void config(JSONObject config) throws ConfigException {
-        int port = (int) config.get("port");
+        int port = (Integer) config.get("port");
 
         // ensure motor not already in use
         if (Hardware.activePorts.contains(port)) {
@@ -22,9 +22,9 @@ public class MotorOutput extends Output {
 
         this.port = port;
         victorSP = new VictorSP(port);
-        enabled = (boolean) config.getOrDefault("enabled", true);
-        scale = (double) config.getOrDefault("scale", 1);
-        victorSP.setInverted((boolean) config.getOrDefault("reversed", false));
+        enabled = (Boolean) config.getOrDefault("enabled", true);
+        scale = (Double) config.getOrDefault("scale", 1);
+        victorSP.setInverted((Boolean) config.getOrDefault("reversed", false));
     }
 
     @Override

@@ -11,7 +11,7 @@ public class ConstInput extends Input {
     private double value;
 
     public void config(JSONObject config) throws ConfigException {
-        value = (double) config.get("value");
+        value = (Double) config.get("value");
     }
 
     public double getInput() {

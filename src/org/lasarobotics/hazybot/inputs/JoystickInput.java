@@ -26,9 +26,9 @@ public class JoystickInput {
 
         @Override
         public void config(JSONObject config) throws ConfigException {
-            int port = (int) config.get("port");
+            int port = (Integer) config.get("port");
             joystick = getJoystick(port);
-            deadband = (double) config.getOrDefault("deadband", 0);
+            deadband = (Double) config.getOrDefault("deadband", 0);
         }
 
         public double getInput() {
@@ -49,11 +49,11 @@ public class JoystickInput {
 
         @Override
         public void config(JSONObject config) throws ConfigException {
-            int port = (int) config.get("port");
-            button = (int) config.get("button");
-            on = (double) config.getOrDefault("on", 1);
-            off = (double) config.getOrDefault("off", 0);
-            toggle = (boolean) config.getOrDefault("toggle", false);
+            int port = (Integer) config.get("port");
+            button = (Integer) config.get("button");
+            on = (Double) config.getOrDefault("on", 1);
+            off = (Double) config.getOrDefault("off", 0);
+            toggle = (Boolean) config.getOrDefault("toggle", false);
         }
 
         public double getInput() {

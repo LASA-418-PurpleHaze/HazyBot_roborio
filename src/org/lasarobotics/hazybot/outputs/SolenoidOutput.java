@@ -14,7 +14,7 @@ public class SolenoidOutput extends Output {
     private int port;
 
     public void config(JSONObject config) throws ConfigException {
-        int port = (int) config.get("port");
+        int port = (Integer) config.get("port");
 
         // ensure solenoid not already in use
         if (activePorts.contains(port)) {

@@ -11,8 +11,8 @@ public class CheesyDrive extends Mode {
     double config_sensitivity = 0.0;
 
     public void config(JSONObject config) throws ConfigException {
-        quick_turn = (int) config.get("quick_turn");
-        config_sensitivity = (double) config.get("sensitivity");      
+        quick_turn = (Integer) config.get("quick_turn");
+        config_sensitivity = (Double) config.get("sensitivity");
     }
 
     public void teleopPeriodic() throws ConfigException {
